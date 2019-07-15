@@ -8,12 +8,12 @@ from io import BytesIO
 from fastai import *
 from fastai.vision import *
 
-# model_file_url = 'https://www.dropbox.com/s/y4kl2gv1akv7y4i/stage-2.pth?raw=1'
-model_file_url = 'https://drive.google.com/uc?export=download&id=1e8opYONMlF-f8nhj204E8rFKKyIuTpCv'
+model_file_url = 'https://www.dropbox.com/s/y4kl2gv1akv7y4i/stage-2.pth?raw=1'
+# corgis: model_file_url = 'https://drive.google.com/uc?export=download&id=1e8opYONMlF-f8nhj204E8rFKKyIuTpCv'
     
 model_file_name = 'model'
-# classes = ['black', 'grizzly', 'teddys']
-classes = ['bread', 'corgi']
+classes = ['black', 'grizzly', 'teddys']
+# corgis: classes = ['bread', 'corgi']
 path = Path(__file__).parent
 
 app = Starlette()
@@ -30,7 +30,7 @@ async def download_file(url, dest):
 async def setup_learner():
     await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
     data_bunch = ImageDataBunch.single_from_classes(path, classes,
-        ds_tfms=get_transforms(), size=224).normalize(imagenet_stats)
+        tfms=get_transforms(), size=224).normalize(imagenet_stats)
     learn = cnn_learner(data_bunch, models.resnet34, pretrained=False)
     learn.load(model_file_name)
     return learn
